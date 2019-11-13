@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import sun.misc.BASE64Encoder;
-import java.net.HttpURLConnection;
 
 public class Main {
     public static String base64Encoder(String s) {
@@ -18,23 +17,13 @@ public class Main {
         }
         return new BASE64Encoder().encode(b);
     }
-    public static void testInternet() {
-        try {
-            URL url = new URL("http://baidu.com");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.connect();
-            if (con.getResponseCode() == 200) {
-                System.out.println("[*]Internet OK!");
-            } else {
-                System.out.println("[!]Connection failed!");
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static boolean testInternet(StringBuffer st) {
+        int pos = st.indexOf("status", 0);
+        //System.out.println(pos);
+        //System.out.println(st.charAt(pos + 8));
+
+        return st.charAt(pos + 8) == '1'?true:false;
         
-
-
     }
     public static void sendPostRequests(String site, String param) {
         try {
@@ -54,8 +43,13 @@ public class Main {
             }
             writer.close();
             reader.close();
-            
-            testInternet();
+            //System.out.println(answer);
+
+            if (testInternet(answer)) {
+                System.out.println("[*]Login success!");
+            } else {
+                System.out.println("[!]Oops! failed!");
+            }
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
