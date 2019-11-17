@@ -17,12 +17,23 @@ public class Main {
         }
         return new BASE64Encoder().encode(b);
     }
-    public static boolean testInternet(StringBuffer st) {
-        int pos = st.indexOf("status", 0);
-        //System.out.println(pos);
-        //System.out.println(st.charAt(pos + 8));
-
-        return st.charAt(pos + 8) == '1'?true:false;
+    public static void testInternet(StringBuffer st) {
+        int pos = st.indexOf("info", 0) + 6;
+        int left = st.indexOf("\"", pos);
+        int right = st.indexOf("\"", pos + 2);
+        // System.out.println(left);
+        // System.out.println(right);
+        String subs = st.substring(left+1, right);
+        //System.out.println(subs);
+        
+        String symbol = subs.substring(2, 6);
+        if (symbol.equals("7528")) {
+            System.out.println("[!]" + "\u7528\u6237\u5df2\u767b\u5f55");
+        } else if (symbol.equals("8ba4")) {
+            System.out.println("[*]\u8ba4\u8bc1\u6210\u529f");
+        } else {
+            System.out.println("[!]\u767b\u9646\u5931\u8d25");
+        }
         
     }
     public static void sendPostRequests(String site, String param) {
@@ -44,12 +55,7 @@ public class Main {
             writer.close();
             reader.close();
             //System.out.println(answer);
-
-            if (testInternet(answer)) {
-                System.out.println("[*]Login success!");
-            } else {
-                System.out.println("[!]Oops! failed!");
-            }
+            testInternet(answer);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -61,7 +67,7 @@ public class Main {
         /*
         Rewrite "ChinaNet" below to change domain !
         */
-        String username = "";//your username
+        String username = "";//your user name
         String password = base64Encoder("");//your password
         sendPostRequests(
             "http://a.nuist.edu.cn/index.php/index/login",
